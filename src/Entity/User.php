@@ -80,12 +80,6 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
-    private $administrateur;
-
-    /**
-     * @ORM\Column(type="boolean")
-     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     */
     private $actif;
 
     /**
