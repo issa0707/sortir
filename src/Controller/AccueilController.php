@@ -10,6 +10,7 @@ class AccueilController extends AbstractController
 {
     /*
      * je suis la
+     * moi aussi
      */
     #[Route('/accueil', name: 'accueil')]
     public function index(): Response
