@@ -5,15 +5,20 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
+        <link rel="stylesheet" href="{{ asset('css/boostrap.css') }}">
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
         {% endblock %}
+        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/popper.js') }}"></script>
+        <script src="{{ asset('js/boostrap.js') }}"></script>
 
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </head>
     <body>
+        {% include  'menu/nav.html.twig'%}
         {% block body %}{% endblock %}
     </body>
 </html>
