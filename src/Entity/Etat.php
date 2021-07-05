@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EtatRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EtatRepository::class)
@@ -18,7 +19,8 @@ class Etat
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=120)
+     * @ORM\Column(type="string", length=120, unique=true)
+     * @Assert\Unique(message="Ce champ doit être unique !")
      */
     private $libelle;
 

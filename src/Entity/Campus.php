@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CampusRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CampusRepository::class)
@@ -18,7 +19,9 @@ class Campus
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=120)
+     * @ORM\Column(type="string", length=120, unique=true)
+     *@Assert\NotBlank(message="Veuillez rentrer un nom SVP !")
+     * @Assert\Unique(message="Ce nom existe déjà !")
      */
     private $nom;
 

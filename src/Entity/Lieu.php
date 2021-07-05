@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\LieuRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LieuRepository::class)
@@ -18,28 +19,34 @@ class Lieu
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
+     * @Assert\Unique(message="Ce nom existe déjà !")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $rue;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $latitude;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $longitude;
 
     /**
      * @ORM\ManyToOne(targetEntity=Ville::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $ville;
 

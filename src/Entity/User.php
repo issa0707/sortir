@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -22,6 +23,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
+     * @Assert\Unique(message="Ce pseudo existe déjà !")
      */
     private $pseudo;
 
@@ -33,6 +36,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $password;
 
@@ -48,31 +52,39 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=120)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=120)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=12, nullable=true)
+     * @ORM\Column(type="string", length=13, nullable=true)
+     * @Assert\Length(min=10, max=13)
      */
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
+     * @Assert\Email(message="Email invalid !")
+     * @Assert\Unique(message="Cet email existe déjà !")
      */
     private $mail;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $administrateur;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $actif;
 
@@ -84,6 +96,7 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $campus;
 

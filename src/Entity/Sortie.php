@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -20,32 +21,42 @@ class Sortie
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
+     * @Assert\Unique(message="Ce nom existe déjà !")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
+     * @Assert\DateTime(message="Veuiller renseigner une date")
+     * @Assert\GreaterThan(propertyPath="dateLimiteInscription")
      */
     private $dateHeureDebut;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
+     * @Assert\Date(message="Veuiller renseigner une date")
      */
     private $dateLimiteInscription;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $nbMaxInscription;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $infoSortie;
 
@@ -57,24 +68,28 @@ class Sortie
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $etat;
 
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $campus;
 
     /**
      * @ORM\ManyToOne(targetEntity=Lieu::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $lieu;
 
     /**
      * @ORM\ManyToOne(targetEntity=user::class, inversedBy="sortiesOrganiser")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $organisateur;
 
