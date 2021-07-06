@@ -87,14 +87,14 @@ class Sortie
     private $lieu;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="sortiesOrganiser")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganiser")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $organisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=user::class, inversedBy="sortiesParticipant")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sortiesParticipant")
      */
     private $participation;
 
