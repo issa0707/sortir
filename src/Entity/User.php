@@ -6,11 +6,13 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"pseudo"}, message="There is already an account with this pseudo")
  */
 class User implements UserInterface
 {
@@ -282,18 +284,6 @@ class User implements UserInterface
     public function setMail(string $mail): self
     {
         $this->mail = $mail;
-
-        return $this;
-    }
-
-    public function getAdministrateur(): ?bool
-    {
-        return $this->administrateur;
-    }
-
-    public function setAdministrateur(bool $administrateur): self
-    {
-        $this->administrateur = $administrateur;
 
         return $this;
     }
