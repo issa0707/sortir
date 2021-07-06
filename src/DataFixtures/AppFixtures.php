@@ -61,7 +61,7 @@ class AppFixtures extends Fixture
                     $campus2);
 
             }
-            $date = new DateTime();
+            $date = new \DateTime();
             $ville = $this->creeVille("ville".$i,"00000");
             $lieu = $this->creeLieu("lieu".$i,$i,$i,"rue".$i,$ville);
             if ($i==1 || $i==3 || $i==5) {
@@ -115,7 +115,7 @@ class AppFixtures extends Fixture
         $lieu->setVille($ville);
         return $lieu;
     }
-    private function creeSortie(String $nom,DateTime $datedeb,int $duree,DateTime $datelim,
+    private function creeSortie(String $nom,\DateTime $datedeb,int $duree,\DateTime $datelim,
                                 int $nbMax,Lieu $lieu,String $infoSor,User $orga,Etat $etat,Campus $campus):Sortie{
         $sortie=new Sortie;
         $sortie->setNom($nom);
