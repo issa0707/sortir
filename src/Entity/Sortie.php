@@ -42,7 +42,7 @@ class Sortie
     private $duree;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      * @Assert\Date(message="Veuiller renseigner une date")
      */
