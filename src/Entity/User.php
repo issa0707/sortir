@@ -26,7 +26,6 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     * @Assert\Unique(message="Ce pseudo existe déjà !")
      */
     private $pseudo;
 
@@ -73,8 +72,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     * @Assert\Email(message="Email invalid !")
-     * @Assert\Unique(message="Cet email existe déjà !")
+     * @Assert\Email(message="veuiller renseigner un mail correct")
      */
     private $mail;
 
