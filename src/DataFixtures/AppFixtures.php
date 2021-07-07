@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
                     "rissa".$i."@machin.fr",
                     '123',
                     true,
-                    "USER",$campus1);
+                    "ROLE_USER",$campus1);
 
             } else {
                 $user = $this->creeUser("Rissa".$i,
@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
                     "rissa".$i."@machin.fr",
                     '123',
                     true,
-                    "Admin",
+                    "ROLE_ADMIN",
                     $campus2);
 
             }
