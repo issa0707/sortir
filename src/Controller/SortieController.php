@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Sortie;
 use App\Form\RechercheSortieType;
+use App\Form\SortieType;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,5 +59,23 @@ class SortieController extends AbstractController
         return $this->render('sortie/detailSortie.html.twig',[
             'sortie'=>$sortie
         ]);
+    }
+
+    /**
+     * @Route("sortie/creer",name = "sortie_creer")
+     */
+    public function creer(EntityManagerInterface $entityManager, Request $request) {
+        $sortie = new Sortie();
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->$this->addFlash('success', 'sortie créée ! ');
+        }
+
     }
 }
