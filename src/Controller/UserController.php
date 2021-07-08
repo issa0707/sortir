@@ -21,10 +21,8 @@ class UserController extends AbstractController
                                 EntityManagerInterface $entityManager,
                                 Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $id = $this->getUser()->getId();
-        //création de l'instance de User
-        $user = $userRepository->find($id);
 
+        $user= $this->getUser();
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
 
