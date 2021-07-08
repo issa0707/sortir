@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>{{ user.nom }}</div>
+    <div>{{ user.prenom }}</div>
+    <div>{{ user.telephone }}</div>
+    <div>{{ user.mail }}</div>
+    <div>{{ user.campus.nom }}</div>
+
+    <input  type="reset" value="Retour" onclick= "document.location.href='{{ path('accueil') }}'">
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

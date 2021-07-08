@@ -50,4 +50,16 @@ class UserController extends AbstractController
            'userForm' => $userForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/profil/detail/{id}", name = "user_detailProfil")
+     */
+    public function detailProfil (int $id, UserRepository $userRepository) {
+
+        $user = $userRepository->find($id);
+
+        return $this->render('user/detail.html.twig', [
+            'user' => $user
+        ]);
+    }
 }
