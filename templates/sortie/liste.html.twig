@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste de sortie{% endblock %}
+
+{% block body %}
+    <div>
+      <p>Date du jour : {{ "now"|date("d/m/Y") }}</p>
+      <p>Participant  : {{ app.user.username }}</p>
+    </div>
+    <div>
+        {{ form_start(rechercheSortieForm) }}
+        <div>
+            <div>
+                {{ form_row(rechercheSortieForm.campus) }}
+                {{ form_row(rechercheSortieForm.contient) }}
+            </div>
+            <div>
+                {{ form_row(rechercheSortieForm.apres) }}
+                {{ form_row(rechercheSortieForm.avant) }}
+            </div>
+        </div>
+        <div >
+            {{ form_row(rechercheSortieForm.organise) }}
+            {{ form_row(rechercheSortieForm.inscrit) }}
+            {{ form_row(rechercheSortieForm.pasInscrit) }}
+            {{ form_row(rechercheSortieForm.passees) }}
+        </div>
+        <div>
+            <button>Rechercher</button>
+        </div>
+        {{ form_end(rechercheSortieForm) }}
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>nom de la sortie </th>
+                    <th>date de la sortie </th>
+                    <th>clôture</th>
+                    <th>inscrit/places</th>
+                    <th>etat</th>
+                    <th>inscrit</th>
+                    <th>organisateur</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%  for sortie in resultat %}
+                    <tr>
+                        <td>{{ sortie.getNom() }}</td>
+                        <td>{{ sortie.getDateHeureDebut()|date("d/m/Y H:m", "Europe/Paris" ) }}</td>
+                        <td>{{ sortie.getDateLimiteInscription()|date("d/m/Y") }}</td>
+                        <td>{{ sortie.getParticipation()|length }}/ {{ sortie.getNbMaxInscription() }}</td>
+                        <td>{{ sortie.getEtat().getLibelle() }}</td>
+                        <td>todo</td>
+                        <td><a href="{{ path('user_detail',{{ sortie.getOrganisateur().getId() }}) }}">{{ sortie.getOrganisateur().getPseudo() }}</a></td>
+                        <td>todo <a href="{{ path('sortie_detail',{'id':sortie.getId()}) }}">afficher detail</a></td>
+                    </tr>
+                {%  endfor %}
+            </tbody>
+        </table>
+    </div>
+*{% endblock %}
