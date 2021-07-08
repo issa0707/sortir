@@ -47,13 +47,6 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function mesParticipation($sorties){
-        $em = $this->getEntityManager();
-        $qb= $this->createQueryBuilder('s') ;
-        $qb->where( 'Member of $sorties');
-
-        return $qb->getQuery();
-    }
 
     public function rechercheSortie(mixed $getData)
     {
