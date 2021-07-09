@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,7 +29,7 @@ class SortieModifierType extends AbstractType
             ->add('nom', TextType::class,[
                 'label' => 'Nom de la sortie:'
             ])
-            ->add('dateHeureDebut', DateType::class, [
+            ->add('dateHeureDebut', DateTimeType::class, [
                 'label' => 'Date et heure de la sortie:'
             ])
             ->add('duree', IntegerType::class, [

@@ -109,6 +109,9 @@ class SortieController extends AbstractController
                              SortieRepository $sortieRepository) {
 
         $sortie = $sortieRepository->find($id);
+
+        if($sortie->getEtat()->getLibelle()==="creee" || $sortie->getEtat()->getLibelle()==="ouverte") {
+
         $user=$this->getUser();
         $sortieModifierForm = $this->createForm(SortieModifierType::class, $sortie);
         $sortieModifierForm->handleRequest($request);
@@ -123,18 +126,29 @@ class SortieController extends AbstractController
             if($request->request->get('publier')){
                 $etat = $etatRepository->findOneByLibelle("ouverte");
                 $sortie->setEtat($etat);
+            }
+            if($request->request->get('supprimer')) {
+                return $this->redirectToRoute('sortie_annulation');
 
             }
+
             $sortie->setOrganisateur($user);
 
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('sortie_detail', ['id'=>$sortie->getId()]);//endif
-        }
-        return $this->render('sortie/modifier.html.twig', [
-            'sortieModifierForm' => $sortieModifierForm->createView(),
-        ]);
+                   return $this->redirectToRoute('sortie_detail', [
+                       'id'=>$sortie->getId(),
+                    ]);
+
+                }
+                return $this->render('sortie/modifier.html.twig', [
+                    'sortieModifierForm' => $sortieModifierForm->createView(),
+                ]);
+                }
+
+        $this->addFlash('success', 'Vous ne pouvez pas modifier cette sortie !');
+        return $this->redirectToRoute('accueil');
     }
     /**
      * @Route("sortie/inscription/{id}", name="sortie_inscription" ,requirements={"id" : "\d+"})
