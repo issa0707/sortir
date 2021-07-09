@@ -68,7 +68,7 @@ class SortieController extends AbstractController
      * @Route("sortie/creer",name = "sortie_creer")
      */
     public function creer(EntityManagerInterface $entityManager, Request $request, EtatRepository $etatRepository) {
-           $sortie = new Sortie();
+        $sortie = new Sortie;
         $user=$this->getUser();
         $sortie->setCampus($user->getCampus());
         $sortieForm = $this->createForm(SortieType::class, $sortie);
@@ -76,9 +76,11 @@ class SortieController extends AbstractController
 
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid() ) {
+
             if($request->request->get('enregistrer')){
                 $etat = $etatRepository->findOneByLibelle("creee");
                 $sortie->setEtat($etat);
+
             }
 
             if($request->request->get('publier')){
@@ -132,6 +134,121 @@ class SortieController extends AbstractController
         }
         return $this->render('sortie/modifier.html.twig', [
             'sortieModifierForm' => $sortieModifierForm->createView(),
+        ]);
+    }
+    /**
+     * @Route("sortie/inscription/{id}", name="sortie_inscription" ,requirements={"id" : "\d+"})
+     */
+    public function inscription( $id ,SortieRepository $sortieRepository, EtatRepository $etatRepository,EntityManagerInterface $entityManager):Response{
+        //recherche de la sortie
+        $sortie=new Sortie;
+        $sortie=$sortieRepository->find($id);
+        //recuperation get user
+        $user=$this->getUser();
+        //recuperation etat ouvert
+        $etat=$etatRepository->findOneByLibelle("ouverte");
+        //recuperation de la date
+        $date=new \DateTime('now');
+        // si la sortie est ouverte
+        if($sortie->getEtat()==$etat){
+            // si la date est inferieur a aujourd'hui
+            if($sortie->getDateLimiteInscription()<$date){
+                // si il reste des place
+                if($sortie->getNbMaxInscription()>$sortie->getParticipation()->count()){
+                    // verif si user est deja inscrit
+                    //creation d'une variable memoire
+                    $memoire=0;
+                    foreach ($sortie->getParticipation() as $participant){
+                        if($participant==$user){
+                            //si on trouve l'utilisateur on passe la memoire a 1
+                            $memoire=1;
+                        }
+                    }
+                    if($memoire==0){
+
+                        //inscription
+                        $sortie->getParticipation()->add($user);
+                        $entityManager->persist($sortie);
+                        $entityManager->flush();
+                        //message valider
+                        //$this->$this->addFlash('success', 'vous etes inscrit ! ');
+                    }
+                    else{
+                        // message incription imposible : vous etes deja inscrit
+                    }
+                }
+                else{
+                    // message incription imposible : le nombre max deja atteind
+                }
+            }
+            else{
+                //message incription imposible : la date d'inscription est depasser
+            }
+            //
+        }
+        else{
+            //message incription imposible : la sortie n'est pas ouverte
+        }
+        return $this->render('sortie/detailSortie.html.twig',[
+            'sortie'=>$sortie
+        ]);
+    }
+    /**
+     * @Route("sortie/desinscription/{id}", name="sortie_desinscription" ,requirements={"id" : "\d+"})
+     */
+    public function desinscription( $id ,SortieRepository $sortieRepository, EtatRepository $etatRepository,EntityManagerInterface $entityManager):Response{
+        //recherche de la sortie
+        $sortie=new Sortie();
+        $sortie=$sortieRepository->find($id);
+        //recuperation get user
+        $user=$this->getUser();
+        //recuperation etat ouvert
+        $etat=$etatRepository->findOneByLibelle("ouverte");
+        //recuperation de la date
+        $date=new \DateTime('now');
+        // si la sortie est ouverte
+        if($sortie->getEtat()==$etat){
+            // si la date est inferieur a aujourd'hui
+            if($sortie->getDateLimiteInscription()<$date){
+                // si il reste des place
+                if($sortie->getNbMaxInscription()>$sortie->getParticipation()->count()){
+                    // verif si user est deja inscrit
+                    //creation d'une variable memoire
+                    $memoire=0;
+                    foreach ($sortie->getParticipation() as $participant){
+                        if($participant==$user){
+                            //si on trouve l'utilisateur on passe la memoire a 1
+                            $memoire=1;
+                        }
+                    }
+                    if($memoire==1){
+
+                        //inscription
+
+                        $sortie->getParticipation()->removeElement($user);
+                        $entityManager->persist($sortie);
+                        $entityManager->flush();
+                        //message valider
+                        //$this->$this->addFlash('success', 'vous etes inscrit ! ');
+                    }
+                    else{
+                        // message incription imposible : vous etes n'etes pas inscrit
+                    }
+                }
+                else{
+                    // message incription imposible : le nombre max deja atteind
+                }
+            }
+            else{
+                //message incription imposible : la date d'inscription est depasser
+            }
+            //
+        }
+        else{
+            //message incription imposible : la sortie n'est pas ouverte
+        }
+        return $this->render('sortie/detailSortie.html.twig',[
+            'sortie'=>$sortie
         ]);
     }
 }
