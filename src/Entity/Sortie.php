@@ -29,7 +29,6 @@ class Sortie
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     * @Assert\DateTime(message="Veuiller renseigner une date")
      * @Assert\GreaterThan(propertyPath="dateLimiteInscription")
      */
     private $dateHeureDebut;
@@ -43,7 +42,6 @@ class Sortie
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     * @Assert\Date(message="Veuiller renseigner une date")
      */
     private $dateLimiteInscription;
 
@@ -67,7 +65,6 @@ class Sortie
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class)
      * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $etat;
 
@@ -88,7 +85,6 @@ class Sortie
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganiser")
      * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $organisateur;
 

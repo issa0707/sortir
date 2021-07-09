@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\RechercheSortieType;
+use App\Form\SortieModifierType;
 use App\Form\SortieType;
-use App\Repository\LieuRepository;
-use App\Outils\RechercheSortieClass;
 use App\Repository\EtatRepository;
+use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,18 +67,71 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/creer",name = "sortie_creer")
      */
-    public function creer(EntityManagerInterface $entityManager, Request $request) {
-        $sortie = new Sortie();
+    public function creer(EntityManagerInterface $entityManager, Request $request, EtatRepository $etatRepository) {
+           $sortie = new Sortie();
+        $user=$this->getUser();
+        $sortie->setCampus($user->getCampus());
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid() ) {
+            if($request->request->get('enregistrer')){
+                $etat = $etatRepository->findOneByLibelle("creee");
+                $sortie->setEtat($etat);
+            }
+
+            if($request->request->get('publier')){
+                $etat = $etatRepository->findOneByLibelle("ouverte");
+                $sortie->setEtat($etat);
+
+            }
+            $sortie->setOrganisateur($user);
 
             $entityManager->persist($sortie);
             $entityManager->flush();
 
-            $this->$this->addFlash('success', 'sortie créée ! ');
+               return $this->redirectToRoute('sortie_detail', ['id'=>$sortie->getId()]);//endif
         }
+        return $this->render('sortie/creer.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+            ]);
+    }
 
+    /**
+     * @Route("sortie/modifier/{id}",name = "sortie_modifier")
+     */
+    public function modifier(int $id, EntityManagerInterface $entityManager,
+                             Request $request,
+                             EtatRepository $etatRepository,
+                             SortieRepository $sortieRepository) {
+
+        $sortie = $sortieRepository->find($id);
+        $user=$this->getUser();
+        $sortieModifierForm = $this->createForm(SortieModifierType::class, $sortie);
+        $sortieModifierForm->handleRequest($request);
+
+
+        if ($sortieModifierForm->isSubmitted() && $sortieModifierForm->isValid() ) {
+            if($request->request->get('enregistrer')){
+                $etat = $etatRepository->findOneByLibelle("creee");
+                $sortie->setEtat($etat);
+            }
+
+            if($request->request->get('publier')){
+                $etat = $etatRepository->findOneByLibelle("ouverte");
+                $sortie->setEtat($etat);
+
+            }
+            $sortie->setOrganisateur($user);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('sortie_detail', ['id'=>$sortie->getId()]);//endif
+        }
+        return $this->render('sortie/modifier.html.twig', [
+            'sortieModifierForm' => $sortieModifierForm->createView(),
+        ]);
     }
 }

@@ -16,7 +16,7 @@
 
         </div>
         <div>
-            {{ form_row(sortieForm.campus) }}
+            <label>Campus : {{ app.user.campus.nom }}</label>
             {{ form_row(sortieForm.ville) }}
             {{ form_row(sortieForm.lieu) }}
 
@@ -35,8 +35,8 @@
         </div>
 
         <div>
-            <button>Enregistrer</button>
-            <button>Publier la sortie</button>
+            <input type="submit" value="Enregistrer" name="enregistrer">
+            <input type="submit" value="Publier" name="publier" >
             <input  type="reset" value="Annuler" onclick= "document.location.href='{{ path('accueil') }}'">
         </div>
 

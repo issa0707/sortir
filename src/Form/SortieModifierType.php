@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-class SortieType extends AbstractType
+class SortieModifierType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -43,10 +43,9 @@ class SortieType extends AbstractType
             ->add('infoSortie', TextareaType::class, [
                 'label'=> 'Information sur la sortie:'
             ])
-            ->add('ville', EntityType::class, [
-                'class' => Lieu::class,//action commande javascript pour cree variable lieux
-                'choice_label' => 'ville.nom',
-                'mapped' => false
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'nom'
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,

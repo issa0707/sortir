@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <h2>Modifier une sortie</h2>
+
+    <div>
+        {{ form_start(sortieModifierForm) }}
+        <div>
+            {{ form_row(sortieModifierForm.nom) }}
+            {{ form_row(sortieModifierForm.dateHeureDebut) }}
+            {{ form_row(sortieModifierForm.duree) }}
+            {{ form_row(sortieModifierForm.dateLimiteInscription) }}
+            {{ form_row(sortieModifierForm.nbMaxInscription) }}
+            {{ form_row(sortieModifierForm.infoSortie) }}
+
+        </div>
+        <div>
+            {{ form_row(sortieModifierForm.campus) }}
+            {{ form_row(sortieModifierForm.ville) }}
+            {{ form_row(sortieModifierForm.lieu) }}
+
+            {#  <label>Rue</label>
+            {{ lieu.rue }}
+            <br>
+            <label>Code postal</label>
+            {{ lieu.ville.codePostal}}
+            <br>
+            <label>Latitude</label>
+            {{ lieu.latitude }}
+            <br>
+            <label>Longitude</label>
+            {{ lieu.longitude }} #}
+
+        </div>
+
+        <div>
+            <input type="submit" value="Enregistrer" name="enregistrer">
+            <input type="submit" value="Publier" name="publier">
+            <input type="submit" value="Supprimer" name="supprimer">
+            <input  type="reset" value="Annuler" onclick= "document.location.href='{{ path('accueil') }}'">
+        </div>
+
+        {{ form_end(sortieModifierForm) }}
+    </div>
+{% endblock %}
+
