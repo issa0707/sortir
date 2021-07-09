@@ -23,7 +23,6 @@ class Sortie
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     * @Assert\Unique(message="Ce nom existe déjà !")
      */
     private $nom;
 

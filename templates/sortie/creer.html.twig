@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+    <h2>Créer une sortie</h2>
+    <div>
+        {{ form_start(sortieForm) }}
+        <div>
+            {{ form_row(sortieForm.nom) }}
+            {{ form_row(sortieForm.dateHeureDebut) }}
+            {{ form_row(sortieForm.duree) }}
+            {{ form_row(sortieForm.dateLimiteInscription) }}
+            {{ form_row(sortieForm.nbMaxInscription) }}
+            {{ form_row(sortieForm.infoSortie) }}
+
+        </div>
+        <div>
+            {{ form_row(sortieForm.campus) }}
+            {{ form_row(sortieForm.ville) }}
+            {{ form_row(sortieForm.lieu) }}
+
+         {#  <label>Rue</label>
+            {{ lieu.rue }}
+            <br>
+            <label>Code postal</label>
+            {{ lieu.ville.codePostal}}
+            <br>
+            <label>Latitude</label>
+            {{ lieu.latitude }}
+            <br>
+            <label>Longitude</label>
+            {{ lieu.longitude }} #}
+
+        </div>
+
+        <div>
+            <button>Enregistrer</button>
+            <button>Publier la sortie</button>
+            <input  type="reset" value="Annuler" onclick= "document.location.href='{{ path('accueil') }}'">
+        </div>
+
+        {{ form_end(sortieForm) }}
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+{# }lieu select option foreach sur variable lieux envoyer dujavascript dans il faut une action javacript pour crée une variable lieu
+    rue p sur la variable lieu.rue #}
