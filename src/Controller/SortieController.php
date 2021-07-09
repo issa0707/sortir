@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use App\Form\AnnulationSortieType;
 use App\Form\RechercheSortieType;
 use App\Form\SortieModifierType;
 use App\Form\SortieType;
@@ -264,5 +265,42 @@ class SortieController extends AbstractController
         return $this->render('sortie/detailSortie.html.twig',[
             'sortie'=>$sortie
         ]);
+    }
+
+    /**
+    * @Route("sortie/annulation/{id}", name="sortie_annulation" ,requirements={"id" : "\d+"})
+     */
+    public function annulerSortie($id,Request $request,
+                                  EtatRepository $etatRepository,
+                                  SortieRepository $sortieRepository,
+                                  EntityManagerInterface $entityManager):Response{
+        $sortie=new Sortie;
+        $sortie=$sortieRepository->find($id);
+        $user=$this->getUser();
+        if($sortie->getOrganisateur()==$user and ($sortie->getEtat()->getLibelle()=='creee' or $sortie->getEtat()->getLibelle()=='ouverte' )){
+            $annulationForm = $this->createForm(AnnulationSortieType::class, $sortie);
+            $annulationForm->handleRequest($request);
+            if ($annulationForm->isSubmitted() && $annulationForm->isValid() ) {
+                $etat=$etatRepository->findOneByLibelle("annulee");
+                $sortie->setEtat($etat);
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+                return $this->render('sortie/detailSortie.html.twig',[
+                    'sortie'=>$sortie
+                ]);
+            }
+            return $this->render('sortie/annulation.html.twig', [
+                'annulationForm' => $annulationForm->createView(),
+                'sortie'=>$sortie
+            ]);
+        }
+        else{
+            // message annulation impossible
+            return $this->render('sortie/detailSortie.html.twig',[
+                'sortie'=>$sortie
+            ]);
+        }
+
+
     }
 }
