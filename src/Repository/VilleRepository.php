@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Ville;
+use App\Outils\RechercheVillesClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Ville|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +49,14 @@ class VilleRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function rechercheVille(RechercheVillesClass $rechercheVilles){
+        $queryBulder=$this->createQueryBuilder('v');
+        if($rechercheVilles->getContient()!=null) {
+            $queryBulder->where(
+                $queryBulder->expr()->like('v.nom', ':mot'));
+            $queryBulder->setParameter('mot', '%' . $rechercheVilles->getContient() . '%');
+        }
+        return $queryBulder->getQuery()->getResult();
+
+    }
 }

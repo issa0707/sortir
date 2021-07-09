@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    création de ville
+{% endblock %}
+
+{% block body %}
+    <h1>création de ville</h1>
+    <h2>filtrer les villes</h2>
+    <div>
+        {{ form_start(rechercheVilleForm) }}
+        {{ form_widget(rechercheVilleForm) }}
+        <input type="submit" name="Rechercher">
+        {{ form_end(rechercheVilleForm) }}
+    </div>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Ville</th>
+                <th>Code Postal</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            {% for ville in resultats %}
+            <tr>
+                <td>{{ ville.nom }}</td>
+                <td>{{ ville.codePostal }}</td>
+                <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
+            </tr>
+            {% endfor %}
+            {{ form_start(villeForm) }}
+            <tr>
+                <td>{{ form_row(villeForm.nom) }}</td>
+                <td>{{ form_row(villeForm.codePostal) }}</td>
+                <td><input type="submit" name="ajouter"></td>
+            </tr>
+            {{ form_end(villeForm) }}
+        </table>
+    </div>
+
+{% endblock %}
+
+
+

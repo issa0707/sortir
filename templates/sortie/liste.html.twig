@@ -60,8 +60,26 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
-                        <td><a href="{{ path('user_detail',{'id': sortie.getOrganisateur().getId() }) }}">{{ sortie.getOrganisateur().getPseudo() }}</a></td>
-                        <td>todo <a href="{{ path('sortie_detail',{'id':sortie.getId()}) }}">afficher detail</a></td>
+                        <td><a href="{{ path('user_detailProfil',{'id': sortie.getOrganisateur().getId() }) }}">{{ sortie.getOrganisateur().getPseudo() }}</a></td>
+                    <td>
+                        {% if sortie.getOrganisateur()== app.user and  sortie.etat.libelle=="creee" %}
+                                    <a href="#">modifier</a>
+                        {% else %}
+                            <a href="{{ path('sortie_detail',{'id':sortie.getId()}) }}">afficher detail</a>
+                        {% endif %}
+                        {% set memoire=0 %}
+                        {%  for participant in sortie.getParticipation() %}
+                            {% if participant == app.user %}
+                                {% set memoire=1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if memoire==1 and sortie.etat.libelle=="ouverte" %}
+                            <a href="{{ path('sortie_desinscription',{'id':sortie.getId()}) }}">desinscription</a>
+                        {% endif %}
+                        {% if memoire==0 and sortie.etat.libelle=="ouverte" %}
+                            <a href="{{ path('sortie_inscription',{'id':sortie.getId()}) }}">inscription</a>
+                        {% endif%} {{ sortie.id }}
+                    </td>
                     </tr>
                 {%  endfor %}
             </tbody>

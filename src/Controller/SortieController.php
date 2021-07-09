@@ -6,6 +6,8 @@ use App\Entity\Sortie;
 use App\Form\RechercheSortieType;
 use App\Form\SortieType;
 use App\Repository\LieuRepository;
+use App\Outils\RechercheSortieClass;
+use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -66,8 +68,6 @@ class SortieController extends AbstractController
      * @Route("sortie/creer",name = "sortie_creer")
      */
     public function creer(EntityManagerInterface $entityManager, Request $request) {
-       // $lieu = $lieuRepository->find(21);
-
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
@@ -78,10 +78,7 @@ class SortieController extends AbstractController
             $entityManager->flush();
 
             $this->$this->addFlash('success', 'sortie créée ! ');
-            return $this->redirectToRoute('sortie_detail', ['id'=>$sortie->getId()]);
         }
-        return $this->render('sortie/creer.html.twig', [
-            'sortieForm' => $sortieForm->createView(),
-            ]);
+
     }
 }
