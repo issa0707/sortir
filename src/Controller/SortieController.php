@@ -148,7 +148,7 @@ class SortieController extends AbstractController
                 ]);
                 }
 
-        $this->addFlash('success', 'Vous ne pouvez pas modifier cette sortie !');
+        $this->addFlash('error', 'Vous ne pouvez pas modifier cette sortie !');
         return $this->redirectToRoute('accueil');
     }
     /**
