@@ -7,6 +7,7 @@ use App\Form\AnnulationSortieType;
 use App\Form\RechercheSortieType;
 use App\Form\SortieModifierType;
 use App\Form\SortieType;
+use App\Outils\MiseAJourSorties;
 use App\Outils\RechercheSortieClass;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
@@ -39,7 +40,11 @@ class SortieController extends AbstractController
      * @return Response
      * @Route("/",name="sortie_listeSortie")
      */
-    public function listeSortie(Request $request,SortieRepository $sortieRepository):Response{
+    public function listeSortie(Request $request,EtatRepository $etatRepository,SortieRepository $sortieRepository,EntityManagerInterface $entityManager):Response{
+
+        //maj des sortie
+        $maj=new MiseAJourSorties($entityManager,$sortieRepository,$etatRepository);
+        $maj->majAuto();
 
         //cretaion de l'entité et du formulaire
         $rechercheSortie = new RechercheSortieClass();
@@ -93,7 +98,7 @@ class SortieController extends AbstractController
         if ($sortieForm->isSubmitted() && $sortieForm->isValid() ) {
 
             if($request->request->get('enregistrer')){
-                $etat = $etatRepository->findOneByLibelle("creee");
+                $etat = $etatRepository->findOneByLibelle("créée");
                 $sortie->setEtat($etat);
 
             }
@@ -125,7 +130,7 @@ class SortieController extends AbstractController
 
         $sortie = $sortieRepository->find($id);
 
-        if($sortie->getEtat()->getLibelle()==="creee" || $sortie->getEtat()->getLibelle()==="ouverte") {
+        if($sortie->getEtat()->getLibelle()==="créée" || $sortie->getEtat()->getLibelle()==="ouverte") {
 
         $user=$this->getUser();
         $sortieModifierForm = $this->createForm(SortieModifierType::class, $sortie);
@@ -134,7 +139,7 @@ class SortieController extends AbstractController
 
         if ($sortieModifierForm->isSubmitted() && $sortieModifierForm->isValid() ) {
             if($request->request->get('enregistrer')){
-                $etat = $etatRepository->findOneByLibelle("creee");
+                $etat = $etatRepository->findOneByLibelle("créée");
                 $sortie->setEtat($etat);
             }
 
@@ -175,53 +180,56 @@ class SortieController extends AbstractController
         $sortie=$sortieRepository->find($id);
         //recuperation get user
         $user=$this->getUser();
-        //recuperation etat ouvert
-        $etat=$etatRepository->findOneByLibelle("ouverte");
+
         //recuperation de la date
         $date=new \DateTime('now');
         // si la sortie est ouverte
-        if($sortie->getEtat()==$etat){
+
+        if ($sortie->getEtat()->getLibelle() == "ouverte" ) {
             // si la date est inferieur a aujourd'hui
-            if($sortie->getDateLimiteInscription()<$date){
+            if ($sortie->getDateLimiteInscription() < $date) {
                 // si il reste des place
-                if($sortie->getNbMaxInscription()>$sortie->getParticipation()->count()){
+                if ($sortie->getNbMaxInscription() > $sortie->getParticipation()->count()) {
                     // verif si user est deja inscrit
                     //creation d'une variable memoire
-                    $memoire=0;
-                    foreach ($sortie->getParticipation() as $participant){
-                        if($participant==$user){
+                    $memoire = 0;
+                    foreach ($sortie->getParticipation() as $participant) {
+                        if ($participant == $user) {
                             //si on trouve l'utilisateur on passe la memoire a 1
-                            $memoire=1;
+                            $memoire = 1;
                         }
                     }
-                    if($memoire==0){
+                    //si l'user est pas deja inscrit
+                    if ($memoire == 0) {
 
+                        //si l'etat est ouvert et que le nombre d'inscrit ateindra le nombre max alors on passe en cloturer
+                        if ($sortie->getEtat()->getLibelle() == "ouverte" &&
+                            $sortie->getNbMaxInscription()-1==$sortie->getParticipation()->count()){
+                            $sortie->setEtat($etatRepository->findOneByLibelle("cloturer"));
+                        }
                         //inscription
                         $sortie->getParticipation()->add($user);
                         $entityManager->persist($sortie);
                         $entityManager->flush();
                         //message valider
                         //$this->$this->addFlash('success', 'vous etes inscrit ! ');
-                    }
-                    else{
+                    } else {
                         // message incription imposible : vous etes deja inscrit
                     }
-                }
-                else{
+                } else {
                     // message incription imposible : le nombre max deja atteind
                 }
-            }
-            else{
+            } else {
                 //message incription imposible : la date d'inscription est depasser
             }
             //
-        }
-        else{
+        } else {
             //message incription imposible : la sortie n'est pas ouverte
         }
+
         return $this->render('sortie/detailSortie.html.twig',[
             'sortie'=>$sortie
-        ]);
+            ]);
     }
     /**
      * @Route("sortie/desinscription/{id}", name="sortie_desinscription" ,requirements={"id" : "\d+"})
@@ -237,7 +245,7 @@ class SortieController extends AbstractController
         //recuperation de la date
         $date=new \DateTime('now');
         // si la sortie est ouverte
-        if($sortie->getEtat()==$etat){
+        if($sortie->getEtat()->getLibelle() == "ouverte"||$sortie->getEtat()->getLibelle() == "cloturer"){
             // si la date est inferieur a aujourd'hui
             if($sortie->getDateLimiteInscription()<$date){
                 // si il reste des place
@@ -251,10 +259,17 @@ class SortieController extends AbstractController
                             $memoire=1;
                         }
                     }
+                    //si l'user est bien inscrit
                     if($memoire==1){
 
-                        //inscription
 
+                        if ($sortie->getEtat()->getLibelle() == "cloturer" &&
+                            $sortie->getParticipation()->count()==$sortie->getNbMaxInscription())
+                        {
+                            $sortie->setEtat($etatRepository->findOneByLibelle("ouverte"));
+                        }
+
+                        //desinscription
                         $sortie->getParticipation()->removeElement($user);
                         $entityManager->persist($sortie);
                         $entityManager->flush();
@@ -292,11 +307,11 @@ class SortieController extends AbstractController
         $sortie=new Sortie;
         $sortie=$sortieRepository->find($id);
         $user=$this->getUser();
-        if($sortie->getOrganisateur()==$user and ($sortie->getEtat()->getLibelle()=='creee' or $sortie->getEtat()->getLibelle()=='ouverte' )){
+        if($sortie->getOrganisateur()==$user and ($sortie->getEtat()->getLibelle()=='créée' or $sortie->getEtat()->getLibelle()=='ouverte' )){
             $annulationForm = $this->createForm(AnnulationSortieType::class, $sortie);
             $annulationForm->handleRequest($request);
             if ($annulationForm->isSubmitted() && $annulationForm->isValid() ) {
-                $etat=$etatRepository->findOneByLibelle("annulee");
+                $etat=$etatRepository->findOneByLibelle("annulée");
                 $sortie->setEtat($etat);
                 $entityManager->persist($sortie);
                 $entityManager->flush();
