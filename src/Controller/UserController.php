@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Outils\chargerPhoto;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function PHPUnit\Framework\isEmpty;
 
 class UserController extends AbstractController
 {
@@ -19,7 +22,9 @@ class UserController extends AbstractController
      */
     public function gererProfil (UserRepository $userRepository,
                                 EntityManagerInterface $entityManager,
-                                Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+                                Request $request,
+                                 UserPasswordEncoderInterface $passwordEncoder,
+                                 chargerPhoto $chargerPhoto): Response
     {
 
         $user= $this->getUser();
@@ -35,13 +40,27 @@ class UserController extends AbstractController
                     $userForm->get('password')->getData()
                 )
             );
+            if($userForm->get('nouvellePhoto')->getData() !=null) {
 
+                //récupération de l'objet UploadFile qui contient mon image
+                $file = $userForm->get('nouvellePhoto')->getData();
+
+                /**
+                 * @var UploadedFile $file
+                 */
+                $directory = $this->getParameter('photo_profil');
+                $fileName = $chargerPhoto->enregistrer($user->getUsername(), $directory, $file);
+                $user->setPhoto($fileName);
+
+            }
             $entityManager->persist($user);
             $entityManager->flush();
 
             $this->addFlash('success', 'votre action a bien été prise en compte');
 
-            return $this->redirectToRoute('accueil');
+            return $this->render('user/detail.html.twig', [
+                'user' => $user
+            ]);
         }
 
         return $this->render('user/profil.html.twig', [

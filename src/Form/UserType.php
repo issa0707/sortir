@@ -35,8 +35,10 @@ class UserType extends AbstractType
                 'class' => Campus::class,
                 'choice_label' => 'nom'
             ])
-            ->add('photo', FileType::class,[
-                'required' => false
+            ->add('nouvellePhoto', FileType::class,[
+                'required' => false,
+                'label' => 'photo',
+                'mapped' => false
             ])
         ;
     }
