@@ -143,7 +143,8 @@ class SortieController extends AbstractController
                 $sortie->setEtat($etat);
             }
             if($request->request->get('supprimer')) {
-                return $this->redirectToRoute('sortie_annulation');
+                //supprimer sortie
+                return $this->redirectToRoute('sortie_annulation',['id'=>$sortie->getId()]);
 
             }
 
