@@ -7,6 +7,7 @@ use App\Form\AnnulationSortieType;
 use App\Form\RechercheSortieType;
 use App\Form\SortieModifierType;
 use App\Form\SortieType;
+use App\Outils\RechercheSortieClass;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
@@ -36,18 +37,31 @@ class SortieController extends AbstractController
      * @param Request $request
      * @param SortieRepository $sortieRepository
      * @return Response
-     * @Route("/sortie",name="sortie_listeSortie")
+     * @Route("/",name="sortie_listeSortie")
      */
     public function listeSortie(Request $request,SortieRepository $sortieRepository):Response{
-        $rechercheSortieForm = $this->createForm(RechercheSortieType::class);
+
+        //cretaion de l'entité et du formulaire
+        $rechercheSortie = new RechercheSortieClass();
+        $rechercheSortieForm = $this->createForm(RechercheSortieType::class,$rechercheSortie);
+
+
+        //recuperation du resultat
         $rechercheSortieForm->handleRequest($request);
+
+        //si le formulaire a deja ete soumis
         if($rechercheSortieForm->isSubmitted()){
+
+            //insertion de l'utilisateur dans l'entité
+            $rechercheSortie->setUser($this->getUser());
+            //recuperation du resultat de la requete
             $resultat=$sortieRepository->rechercheSortie($rechercheSortieForm->getData());
         }
         else{
+            //recuperation de toutes les sortie
             $resultat= $sortieRepository->findall();
         }
-
+        //renvoi vers la page aves le formulaire et les resultat de la requete
         return $this->render('sortie/liste.html.twig',[
             'rechercheSortieForm'=>$rechercheSortieForm->createView(),
             'resultat'=>$resultat
