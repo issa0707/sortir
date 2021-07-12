@@ -127,49 +127,76 @@ class SortieController extends AbstractController
                              Request $request,
                              EtatRepository $etatRepository,
                              SortieRepository $sortieRepository) {
-
+        //recuperation de la sortie en fonction de l'id fourni en parametre
         $sortie = $sortieRepository->find($id);
 
+        //si la sortie est a l'etat crée ou ouverte
         if($sortie->getEtat()->getLibelle()==="créée" || $sortie->getEtat()->getLibelle()==="ouverte") {
 
-        $user=$this->getUser();
-        $sortieModifierForm = $this->createForm(SortieModifierType::class, $sortie);
-        $sortieModifierForm->handleRequest($request);
+            //recuperation d'utilisateur session
+            $user=$this->getUser();
+            //creation formulaire avec la sortie en parametre
+            $sortieModifierForm = $this->createForm(SortieModifierType::class, $sortie);
+            //recuperation des donnee
+            $sortieModifierForm->handleRequest($request);
 
 
-        if ($sortieModifierForm->isSubmitted() && $sortieModifierForm->isValid() ) {
-            if($request->request->get('enregistrer')){
-                $etat = $etatRepository->findOneByLibelle("créée");
-                $sortie->setEtat($etat);
-            }
+            //si le formulaire a ete fourni et valide
+            if ($sortieModifierForm->isSubmitted() && $sortieModifierForm->isValid() ) {
+                //si on a clique sur enregistré
+                if($request->request->get('enregistrer')){
 
-            if($request->request->get('publier')){
-                $etat = $etatRepository->findOneByLibelle("ouverte");
-                $sortie->setEtat($etat);
-            }
-            if($request->request->get('supprimer')) {
-                //supprimer sortie
-                return $this->redirectToRoute('sortie_annulation',['id'=>$sortie->getId()]);
+                    //on set l'etat a crée
+                    $sortie->setEtat($etatRepository->findOneByLibelle("créée"));
+                }
 
-            }
+                //si on a clique sur publier
+                if($request->request->get('publier')){
+                    //on set l'etat a ouvert
+                    $sortie->setEtat($etatRepository->findOneByLibelle("ouverte"));
+                }
 
-            $sortie->setOrganisateur($user);
+                //si on a cliquer sur supprimer
+                if($request->request->get('supprimer') && $sortie->getEtat()->getLibelle()=='créée') {
 
-            $entityManager->persist($sortie);
-            $entityManager->flush();
+                    //TODO mettre une alerte
+                    //suppression de la ligne
+                    $entityManager->remove($sortie);
+                    //on flush la sortie
+                    $entityManager->flush();
 
-                   return $this->redirectToRoute('sortie_detail', [
-                       'id'=>$sortie->getId(),
-                    ]);
+                    //ajout message
+                    $this->addFlash('success', 'La sortie a été supprimée avec succès !');
+                    //redirection vers l'accueil
+                    return $this->redirectToRoute('sortie_listeSortie');
 
                 }
-                return $this->render('sortie/modifier.html.twig', [
-                    'sortieModifierForm' => $sortieModifierForm->createView(),
+
+                //on met l'orgnisateur
+                $sortie->setOrganisateur($user);
+
+                //on persite et flush la sortie
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+
+                //ajout message
+                $this->addFlash('success', 'La sortie a été modifiée avec succès !');
+                //redirection vers le detail de la sortie
+                return $this->redirectToRoute('sortie_detail', [
+                           'id'=>$sortie->getId(),
                 ]);
-                }
 
+            }
+            //redirection vers la page avec formulaire
+            return $this->render('sortie/modifier.html.twig', [
+                'sortieModifierForm' => $sortieModifierForm->createView(),
+            ]);
+        }
+
+        //ajout d'un message ng
         $this->addFlash('error', 'Vous ne pouvez pas modifier cette sortie !');
-        return $this->redirectToRoute('accueil');
+        //redirection vers l'accueil
+        return $this->redirectToRoute('sortie_listeSortie');
     }
     /**
      * @Route("sortie/inscription/{id}", name="sortie_inscription" ,requirements={"id" : "\d+"})
