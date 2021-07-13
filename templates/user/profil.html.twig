@@ -4,17 +4,23 @@
 
 {% block body %}
 
-    <h2>Voir profil</h2>
-    <div>
-        <img src="{{ asset('uploads/photos/'~app.user.photo) }}" height="150px">
-    </div>
-    <div>
-        {{ form_start(userForm) }}
-        {{ form_widget(userForm) }}
-        <button>Enregistrer</button>
+    <h2 class='text-center mb-5'>Votre profil</h2>
+    <div class='container-fluid'>
+        <div class='row'>
+            <div class='col-4'>
+                <img src="{{ asset('uploads/photos/'~app.user.photo) }}" height="250px">
+            </div>
+            <div class='col-6'>
+                {{ form_start(userForm) }}
+                {{ form_widget(userForm) }}
+            </div>
 
-        <input  type="reset" value="annuler" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
-        {{ form_end(userForm) }}
+            <div class='col-12 text-center mt-5'>
+                <input type="submit" value="Enregistrer" class="col-2 btn btn-lg btn-secondary">
+                <input  type="reset" value="Annuler" class="col-2 btn btn-lg btn-secondary" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
+                {{ form_end(userForm) }}
+            </div>
+        </div>
     </div>
 
 

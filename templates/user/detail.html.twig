@@ -1,19 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="mb-5 mt-md-5 row">
-        <div class="col-6">
-            <img src="{{ asset('uploads/photos/')~user.photo }}" alt="Votre photo de profil" height="150px" >
-        </div>
-        <div class="col-6">
-            <div>Nom : {{ user.nom }}</div>
-            <div>Prenom : {{ user.prenom }}</div>
-            <div>Telephone : {{ user.telephone }}</div>
-            <div>Email : {{ user.mail }}</div>
-            <div>Campus : {{ user.campus.nom }}</div>
+    <div class="container-fluid ">
+        <div class="row mb-5 mt-5">
+            <div class="col-2 "></div>
+            <div class=" col-5 text-center">
+                <img src="{{ asset('uploads/photos/')~user.photo }}" alt="photo de profil de {{ app.user.pseudo }}" height="250px" >
+            </div>
+            <div class=" col-5 ">
+                <div class="mb-2 mt-4"> {{ user.pseudo }}</div>
+                <div class="mb-2 mt-5"> {{ user.prenom }}</div>
+                <div class="mb-2"> {{ user.nom }}</div>
+                <div class="mb-2"> {{ user.telephone }}</div>
+                <div class="mb-2"> {{ user.mail }}</div>
+                <div class="mb-2"> {{ user.campus.nom }}</div>
+            </div>
         </div>
     </div>
-    <input  type="reset" value="Retour" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
+    <div class="text-center mt-5">
+        <input  type="reset" class="btn btn-lg btn-secondary " value="Retour" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
+    </div>
 
 {% endblock %}
 

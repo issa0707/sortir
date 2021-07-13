@@ -27,31 +27,47 @@ class SortieType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class,[
-                'label' => 'Nom de la sortie:'
+                'label' => 'Nom de la sortie:',
+                'label_attr'=>['class'=>'col-4'],
+                'attr'=>['class'=>'col-4']
             ])
             ->add('dateHeureDebut', DateTimeType::class, [
-                'label' => 'Date et heure de la sortie:'
+                'label' => 'Date et heure de la sortie:',
+                'label_attr'=>['class'=>'col-4'],
+                'attr'=>['class'=>'col-4']
             ])
             ->add('duree', IntegerType::class, [
-                'label'=> 'Durée:'
+                'label'=> 'Durée:',
+                'label_attr'=>['class'=>'col-4'],
+                'attr'=>['class'=>'col-4']
             ])
             ->add('dateLimiteInscription', DateType::class, [
-                'label' => 'Date limite d\'inscription:'
+                'label' => 'Date limite d\'inscription:',
+                'label_attr'=>['class'=>'col-4'],
+                'attr'=>['class'=>'col-4']
             ])
             ->add('nbMaxInscription', IntegerType::class,[
-                'label' => 'Nombre de places:'
+                'label' => 'Nombre de places:',
+                'label_attr'=>['class'=>'col-4'],
+                'attr'=>['class'=>'col-4']
             ])
             ->add('infoSortie', TextareaType::class, [
-                'label'=> 'Information sur la sortie:'
+                'label'=> 'Information sur la sortie:',
+                'label_attr'=>['class'=>'col-4'],
+                'attr'=>['class'=>'col-4']
             ])
             ->add('ville', EntityType::class, [
-                'class' => Lieu::class,//action commande javascript pour cree variable lieux
+                'class' => Lieu::class,
                 'choice_label' => 'ville.nom',
-                'mapped' => false
+                'mapped' => false,
+                'label_attr'=>['class'=>'col-4']
+
             ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'label_attr'=>['class'=>'col-4']
+
             ])
           // ->add('Enregistrer', SubmitType::class)
         ;

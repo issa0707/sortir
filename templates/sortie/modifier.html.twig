@@ -37,10 +37,10 @@
         </div>
 
         <div>
-            <input type="submit" value="Enregistrer" name="enregistrer">
-            <input type="submit" value="Publier" name="publier">
-            <input type="submit" value="Supprimer" name="supprimer">
-            <input  type="reset" value="Annuler" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
+            <input type="submit" class="btn btn-lg btn-secondary" value="Enregistrer" name="enregistrer">
+            <input type="submit" class="btn btn-lg btn-secondary" value="Publier" name="publier">
+            <input type="submit" class="btn btn-lg btn-secondary" value="Supprimer" name="supprimer">
+            <input  type="reset" class="btn btn-lg btn-secondary" value="Annuler" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
         </div>
 
         {{ form_end(sortieModifierForm) }}

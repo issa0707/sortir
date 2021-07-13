@@ -15,25 +15,32 @@
                 </div>
             {% endif %}
 
-            <h1 class="h3 mb-3 font-weight-normal">Merci de vous identifier </h1>
-            <label for="inputPseudo">Pseudo</label>
-            <input type="text" value="{{ last_username }}" name="pseudo" id="inputPseudo" class="form-control" autocomplete="username" required autofocus>
-            <label for="inputPassword">Mot de passe</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <h1 class="text-center mb-5">Merci de vous identifier </h1>
+            <div class='container-fluid'>
+                <div class='text-center mb-5 '>
+                    <label class='col-12 text-center' for="inputPseudo"><h3>Pseudo</h3></label>
+                    <input type="text" value="{{ last_username }}" name="pseudo" id="inputPseudo" class="col-4 " autocomplete="username" required autofocus>
+                </div>
+                <div class='text-center mb-5'>
+                    <label class='col-12 text-center' for="inputPassword"><h3>Mot de passe</h3></label>
+                    <input type="password" name="password" id="inputPassword" class="col-4" autocomplete="current-password" required>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+                <div class="checkbox text-center mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> se souvenir de moi
+                    </label>
+                </div>
 
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> se souvenir de moi
-                </label>
+
+                <div class='text-center'>
+                <button class="btn btn-lg btn-secondary col-4 " type="submit">
+                    Valider
+                </button>
+                </div>
             </div>
-
-
-            <button class="btn btn-lg btn-primary" type="submit">
-                Valider
-            </button>
         </form>
     </div>
 {% endblock %}

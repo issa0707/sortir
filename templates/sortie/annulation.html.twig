@@ -13,8 +13,8 @@
     <label for="">Lieu : </label>{{ sortie.lieu.nom}} {{sortie.lieu.rue}} {{sortie.lieu.ville.codePostal}} {{sortie.lieu.ville.nom}}
     <br>
     {{ form_widget(annulationForm) }}
-    <input type="submit" name="Enregistrer">
-    <button href="{{ path('sortie_detail',{'id':sortie.getId()}) }}">Retour</button>//le bouton annule c'est pas bon
+    <input type="submit" class='btn btn-lg btn-secondary' name="Enregistrer">
+    <button href="{{ path('sortie_detail',{'id':sortie.getId()}) }}" class='btn btn-lg btn-secondary'>Retour</button>//le bouton annule c'est pas bon
     {{ form_end(annulationForm) }}
 {% endblock %}
 
