@@ -31,22 +31,24 @@ class RechercheSortieType extends AbstractType
             ])
             ->add('avant',DateType::class,[
                 'label'=>' Et le :',
-                'required'=>false
+                'required'=>false,
+                'row_attr'=>['class'=>'d-inline'],
+                'label_attr'=>['class'=>'d-inline']
             ])
             ->add('organise',CheckboxType::class,[
-                'label'=>'Sortie que j\'organise',
+                'label'=>'Sortie que j\'organise : ',
                 'required'=>false
             ])
             ->add('inscrit',CheckboxType::class,[
-                'label'=>'Sortie où je suis inscrit',
+                'label'=>'Sortie où je suis inscrit : ',
                 'required'=>false
             ])
             ->add('pasInscrit',CheckboxType::class,[
-                'label'=>'Sortie où je ne suis pas inscrit',
+                'label'=>'Sortie où je ne suis pas inscrit : ',
                 'required'=>false
             ])
             ->add('passees',CheckboxType::class,[
-                'label'=>'Sortie passées',
+                'label'=>'Sortie passées : ',
                 'required'=>false
             ]);
 
@@ -55,7 +57,8 @@ class RechercheSortieType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            // Configure your form options here
+
+
         ]);
     }
 }

@@ -3,36 +3,44 @@
 {% block title %}Liste de sortie{% endblock %}
 
 {% block body %}
-    <div>
-      <p>Date du jour : {{ "now"|date("d/m/Y") }}</p>
-      <p>Participant  : {{ app.user.username }}</p>
+    <div class='container md-5'>
+        <div class='row flex-column-reverse'>
+            <div class='col-3 align-self-end'>
+              <p>Date du jour : {{ "now"|date("d/m/Y") }}</p>
+              <p>Participant  : {{ app.user.username }}</p>
+            </div>
+        </div>
     </div>
-    <div>
-        {{ form_start(rechercheSortieForm) }}
-        <div>
-            <div>
-                {{ form_row(rechercheSortieForm.campus) }}
-                {{ form_row(rechercheSortieForm.contient) }}
+    {{ form_start(rechercheSortieForm) }}
+    <div class='container mt-md-5' >
+        <div class='row'>
+            <div class='col-md-6'>
+                <div>
+                    {{ form_row(rechercheSortieForm.campus) }}
+                    {{ form_row(rechercheSortieForm.contient) }}
+                </div>
+                <div>
+                    {{ form_row(rechercheSortieForm.apres) }}
+                    {{ form_row(rechercheSortieForm.avant) }}
+                </div>
             </div>
-            <div>
-                {{ form_row(rechercheSortieForm.apres) }}
-                {{ form_row(rechercheSortieForm.avant) }}
+            <div class='col-md-6 m-auto'>
+                {{ form_row(rechercheSortieForm.organise) }}
+                {{ form_row(rechercheSortieForm.inscrit) }}
+                {{ form_row(rechercheSortieForm.pasInscrit) }}
+                {{ form_row(rechercheSortieForm.passees) }}
             </div>
         </div>
-        <div >
-            {{ form_row(rechercheSortieForm.organise) }}
-            {{ form_row(rechercheSortieForm.inscrit) }}
-            {{ form_row(rechercheSortieForm.pasInscrit) }}
-            {{ form_row(rechercheSortieForm.passees) }}
-        </div>
-        <div>
+    </div>
+    <div class='container mt-5'>
+        <div class='d-flex justify-content-center'>
             <button>Rechercher</button>
         </div>
-        {{ form_end(rechercheSortieForm) }}
     </div>
+        {{ form_end(rechercheSortieForm) }}
 
-    <div>
-        <table>
+    <div class='container mt-5'>
+        <table class="table table-sm">
             <thead>
                 <tr>
                     <th>nom de la sortie </th>
@@ -78,7 +86,7 @@
                         {% endif %}
                         {% if memoire==0 and sortie.etat.libelle=="ouverte" %}
                             <a href="{{ path('sortie_inscription',{'id':sortie.getId()}) }}">inscription</a>
-                        {% endif%} {{ sortie.id }}
+                        {% endif%}
                     </td>
                     </tr>
                 {%  endfor %}
