@@ -1,12 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div>{{ user.nom }}</div>
-    <div>{{ user.prenom }}</div>
-    <div>{{ user.telephone }}</div>
-    <div>{{ user.mail }}</div>
-    <div>{{ user.campus.nom }}</div>
-
+    <div class="mb-5 mt-md-5 row">
+        <div class="col-6">
+            <img src="{{ asset('uploads/photos/')~user.photo }}" alt="Votre photo de profil" height="150px" >
+        </div>
+        <div class="col-6">
+            <div>Nom : {{ user.nom }}</div>
+            <div>Prenom : {{ user.prenom }}</div>
+            <div>Telephone : {{ user.telephone }}</div>
+            <div>Email : {{ user.mail }}</div>
+            <div>Campus : {{ user.campus.nom }}</div>
+        </div>
+    </div>
     <input  type="reset" value="Retour" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">
 
 {% endblock %}

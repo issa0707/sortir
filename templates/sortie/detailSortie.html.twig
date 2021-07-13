@@ -3,38 +3,39 @@
 {% block title %}Sortie{% endblock %}
 {# afficher la ville et l'organisateur ? #}
 {% block body %}
-    <div align="center">
-        <div>
-            <label for="nom">Nom de la sortie :</label>
-            <p>{{ sortie.getNom() }}</p>
-            <label for="date">Date et heure de la sortie :</label>
-            <p>{{ sortie.getDateHeureDebut()|date("d/m/Y H:m", "Europe/Paris" ) }}</p>
-            <label for="limite">Date limite d'inscription :</label>
-            <p>{{ sortie.getDateLimiteInscription()|date("d/m/Y") }}</p>
-            <label for="nbPlace">Nombre de places :</label>
-            <p>{{ sortie.getNbMaxInscription() }}</p>
-            <label for="duree">Durée :</label>
-            <p>{{ sortie.getDuree() }} minutes</p>
-            <label for="description">Description et info :</label>
-            <p>{{ sortie.getInfoSortie() }}</p>
+    <div class='container mt-md-5 mb-5 text-secondary'>
+        <div class="row">
+            <div class="col-6">
+                <label for="nom"  >Nom de la sortie :</label>
+                <p >{{ sortie.getNom() }}</p>
+                <label for="date">Date et heure de la sortie :</label>
+                <p>{{ sortie.getDateHeureDebut()|date("d/m/Y H:m", "Europe/Paris" ) }}</p>
+                <label for="limite">Date limite d'inscription :</label>
+                <p>{{ sortie.getDateLimiteInscription()|date("d/m/Y") }}</p>
+                <label for="nbPlace">Nombre de places :</label>
+                <p>{{ sortie.getNbMaxInscription() }}</p>
+                <label for="duree">Durée :</label>
+                <p>{{ sortie.getDuree() }} minutes</p>
+                <label for="description">Description et info :</label>
+                <p>{{ sortie.getInfoSortie() }}</p>
+            </div>
+            <div class="col-6">
+                <label for="campus">Campus :</label>
+                <p>{{ sortie.getCampus().getNom() }}</p>
+                <label for="lieu">Lieu :</label>
+                <p>{{ sortie.getLieu().getNom() }}</p>
+                <label for="rue">Rue :</label>
+                <p>{{ sortie.getLieu().getRue() }}</p>
+                <label for="cp">CodePostal :</label>
+                <p>{{ sortie.getLieu().getVille().getCodePostal() }}</p>
+                <label for="latitude">Latitude :</label>
+                <p>{{ sortie.getLieu().getLatitude() }}</p>
+                <label for="longitude">Longitude :</label>
+                <p>{{ sortie.getLieu().getLongitude() }}</p>
+            </div>
         </div>
         <div>
-            <label for="campus">Campus :</label>
-            <p>{{ sortie.getCampus().getNom() }}</p>
-            <label for="lieu">Lieu :</label>
-            <p>{{ sortie.getLieu().getNom() }}</p>
-            <label for="rue">Rue :</label>
-            <p>{{ sortie.getLieu().getRue() }}</p>
-            <label for="cp">CodePostal :</label>
-            <p>{{ sortie.getLieu().getVille().getCodePostal() }}</p>
-            <label for="latitude">Latitude :</label>
-            <p>{{ sortie.getLieu().getLatitude() }}</p>
-            <label for="longitude">Longitude :</label>
-            <p>{{ sortie.getLieu().getLongitude() }}</p>
-        </div>
-        <div>
-
-            <table>
+            <table class="table table-sm text-secondary mt-5" >
                 <tr>
                     <th>Pseudo</th>
                     <th>Nom</th>
@@ -48,8 +49,11 @@
                     {% endfor %}
 
             </table>
-
         </div>
+    </div>
+        <form action="{{ path('sortie_listeSortie') }}">
+            <button>Retour a l'accueil</button>
+        </form>
     </div>
 
 {% endblock %}

@@ -12,9 +12,9 @@
         </div>
     </div>
     {{ form_start(rechercheSortieForm) }}
-    <div class='container mt-md-5' >
+    <div class='container mt-5 ' >
         <div class='row'>
-            <div class='col-md-6'>
+            <div class='col-md-4 '>
                 <div>
                     {{ form_row(rechercheSortieForm.campus) }}
                     {{ form_row(rechercheSortieForm.contient) }}
@@ -24,7 +24,7 @@
                     {{ form_row(rechercheSortieForm.avant) }}
                 </div>
             </div>
-            <div class='col-md-6 m-auto'>
+            <div class='col-md-6 m-auto  form-check-inline'>
                 {{ form_row(rechercheSortieForm.organise) }}
                 {{ form_row(rechercheSortieForm.inscrit) }}
                 {{ form_row(rechercheSortieForm.pasInscrit) }}
@@ -40,7 +40,7 @@
         {{ form_end(rechercheSortieForm) }}
 
     <div class='container mt-5'>
-        <table class="table table-sm">
+        <table class="table table-sm text-secondary" >
             <thead>
                 <tr>
                     <th>nom de la sortie </th>
@@ -70,8 +70,9 @@
                         </td>
                         <td><a href="{{ path('user_detailProfil',{'id': sortie.getOrganisateur().getId() }) }}">{{ sortie.getOrganisateur().getPseudo() }}</a></td>
                     <td>
-                        {% if sortie.getOrganisateur()== app.user and  sortie.etat.libelle=="creee" %}
-                                    <a href="#">modifier</a>
+                        {% if sortie.getOrganisateur()== app.user and  sortie.etat.libelle=="créée" %}
+                                    <a href="{{ path('sortie_modifier',{'id':sortie.id}) }}">modifier</a>
+                                    <a href="{{ path('sortie_supprime',{'id':sortie.id}) }}">supprimer</a>
                         {% else %}
                             <a href="{{ path('sortie_detail',{'id':sortie.getId()}) }}">afficher detail</a>
                         {% endif %}

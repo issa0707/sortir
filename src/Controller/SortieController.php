@@ -159,14 +159,8 @@ class SortieController extends AbstractController
                 //si on a cliquer sur supprimer
                 if($request->request->get('supprimer') && $sortie->getEtat()->getLibelle()=='créée') {
 
-                    //TODO mettre une alerte
-                    //suppression de la ligne
-                    $entityManager->remove($sortie);
-                    //on flush la sortie
-                    $entityManager->flush();
 
-                    //ajout message
-                    $this->addFlash('success', 'La sortie a été supprimée avec succès !');
+                    $this->supprime($sortie->getId(),$entityManager,$sortieRepository);
                     //redirection vers l'accueil
                     return $this->redirectToRoute('sortie_listeSortie');
 
@@ -214,7 +208,7 @@ class SortieController extends AbstractController
 
         if ($sortie->getEtat()->getLibelle() == "ouverte" ) {
             // si la date est inferieur a aujourd'hui
-            if ($sortie->getDateLimiteInscription() < $date) {
+            if ($sortie->getDateLimiteInscription() > $date) {
                 // si il reste des place
                 if ($sortie->getNbMaxInscription() > $sortie->getParticipation()->count()) {
                     // verif si user est deja inscrit
@@ -239,19 +233,23 @@ class SortieController extends AbstractController
                         $entityManager->persist($sortie);
                         $entityManager->flush();
                         //message valider
-                        //$this->$this->addFlash('success', 'vous etes inscrit ! ');
+                        $this->addFlash('success', 'vous etes inscrits ! ');
                     } else {
                         // message incription imposible : vous etes deja inscrit
+                        $this->addFlash('error', 'vous etes deja inscrits ! ');
                     }
                 } else {
                     // message incription imposible : le nombre max deja atteind
+                    $this->addFlash('error', 'le nombre max de participant deja atteind ! ');
                 }
             } else {
                 //message incription imposible : la date d'inscription est depasser
+                $this->addFlash('error', 'la date d\'inscription depassé ! ');
             }
             //
         } else {
             //message incription imposible : la sortie n'est pas ouverte
+            $this->addFlash('error', 'la sortie n\'est pas ouverte ! ');
         }
 
         return $this->render('sortie/detailSortie.html.twig',[
@@ -274,50 +272,51 @@ class SortieController extends AbstractController
         // si la sortie est ouverte
         if($sortie->getEtat()->getLibelle() == "ouverte"||$sortie->getEtat()->getLibelle() == "cloturer"){
             // si la date est inferieur a aujourd'hui
-            if($sortie->getDateLimiteInscription()<$date){
+            if($sortie->getDateLimiteInscription()>$date){
                 // si il reste des place
-                if($sortie->getNbMaxInscription()>$sortie->getParticipation()->count()){
+                if($sortie->getNbMaxInscription()>$sortie->getParticipation()->count()) {
                     // verif si user est deja inscrit
+                    //Todo repasser la sortie a ouverte si elle est cloturer
                     //creation d'une variable memoire
-                    $memoire=0;
-                    foreach ($sortie->getParticipation() as $participant){
-                        if($participant==$user){
-                            //si on trouve l'utilisateur on passe la memoire a 1
-                            $memoire=1;
-                        }
-                    }
-                    //si l'user est bien inscrit
-                    if($memoire==1){
-
-
-                        if ($sortie->getEtat()->getLibelle() == "cloturer" &&
-                            $sortie->getParticipation()->count()==$sortie->getNbMaxInscription())
-                        {
-                            $sortie->setEtat($etatRepository->findOneByLibelle("ouverte"));
-                        }
-
-                        //desinscription
-                        $sortie->getParticipation()->removeElement($user);
-                        $entityManager->persist($sortie);
-                        $entityManager->flush();
-                        //message valider
-                        //$this->$this->addFlash('success', 'vous etes inscrit ! ');
-                    }
-                    else{
-                        // message incription imposible : vous etes n'etes pas inscrit
+                    $memoire = 0;
+                }
+                foreach ($sortie->getParticipation() as $participant){
+                    if($participant==$user){
+                        //si on trouve l'utilisateur on passe la memoire a 1
+                        $memoire=1;
                     }
                 }
-                else{
-                    // message incription imposible : le nombre max deja atteind
+                //si l'user est bien inscrit
+                if($memoire==1){
+
+
+                    if ($sortie->getEtat()->getLibelle() == "cloturer" &&
+                        $sortie->getParticipation()->count()==$sortie->getNbMaxInscription())
+                    {
+                        $sortie->setEtat($etatRepository->findOneByLibelle("ouverte"));
+                    }
+
+                    //desinscription
+                    $sortie->getParticipation()->removeElement($user);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
+                    //message valider
+                    $this->addFlash('success', 'vous vous etes désistés ! ');
+                }
+                else {
+                    // message incription imposible : vous etes n'etes pas inscrit
+                    $this->addFlash('error', 'vous n\'etiez pas inscrits ! ');
                 }
             }
             else{
                 //message incription imposible : la date d'inscription est depasser
+                $this->addFlash('error', 'la date d\'inscription depassé ! ');
             }
             //
         }
         else{
             //message incription imposible : la sortie n'est pas ouverte
+            $this->addFlash('error', 'la sortie n\'est pas ouverte ou cloturer! ');
         }
         return $this->render('sortie/detailSortie.html.twig',[
             'sortie'=>$sortie
@@ -358,6 +357,37 @@ class SortieController extends AbstractController
             ]);
         }
 
+
+    }
+
+    /**
+     * @param int $id
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @param EtatRepository $etatRepository
+     * @param SortieRepository $sortieRepository
+     * @Route ("sortie/supprime/{id}", name="sortie_supprime" ,requirements={"id" : "\d+"})
+     */
+    public function supprime(int $id, EntityManagerInterface $entityManager,
+                             SortieRepository $sortieRepository){
+
+
+        //recherche de la sortie
+        $sortie=$sortieRepository->find($id);
+        if($sortie->getEtat()->getLibelle()=="créée"||$sortie->getOrganisateur()==$this->getUser()) {
+            //TODO mettre une alerte
+            //suppression de la ligne
+            $entityManager->remove($sortie);
+            //on flush la sortie
+            $entityManager->flush();
+
+            //ajout message
+            $this->addFlash('success', 'La sortie a été supprimée avec succès !');
+        }else{
+            $this->addFlash('error', 'Vous ne pouvez pas supprimer cette sortie !');
+        }
+        //redirection vers l'accueil
+        return $this->redirectToRoute('sortie_listeSortie');
 
     }
 }

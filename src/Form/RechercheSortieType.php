@@ -18,22 +18,33 @@ class RechercheSortieType extends AbstractType
     {
         $builder
             ->add('campus', EntityType::class, [
+                'label'=>'Campus :',
                 'class' => Campus::class ,
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'label_attr'=>['class'=>'control-label'],
+                'row_attr'=>['class'=>'form-group'],
+                'attr'=>['class'=>'form-control'],
             ])
             ->add('contient',TextType::class,[
                 'label'=>'Le nom de sortie contient :',
-                'required'=>false
+                'required'=>false,
+                'label_attr'=>['class'=>'control-label'],
+                'row_attr'=>['class'=>'form-group'],
+                'attr'=>['class'=>'form-control'],
             ])
             ->add('apres', DateType::class,[
                 'label'=>'Entre le :',
-                'required'=>false
+                'required'=>false,
+                'label_attr'=>['class'=>'control-label'],
+                'row_attr'=>['class'=>'form-group'],
+
             ])
             ->add('avant',DateType::class,[
                 'label'=>' Et le :',
                 'required'=>false,
-                'row_attr'=>['class'=>'d-inline'],
-                'label_attr'=>['class'=>'d-inline']
+                'label_attr'=>['class'=>'control-label'],
+                'row_attr'=>['class'=>'form-group'],
+
             ])
             ->add('organise',CheckboxType::class,[
                 'label'=>'Sortie que j\'organise : ',
@@ -57,7 +68,7 @@ class RechercheSortieType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-
+            'label_attr'=>['class'=>'']
 
         ]);
     }
