@@ -34,7 +34,7 @@ class SortieType extends AbstractType
             ->add('dateHeureDebut', DateTimeType::class, [
                 'label' => 'Date et heure de la sortie:',
                 'label_attr'=>['class'=>'col-4'],
-                'attr'=>['class'=>'col-4']
+                'attr'=>['class'=>'col-4 d-inline ']
             ])
             ->add('duree', IntegerType::class, [
                 'label'=> 'Durée:',
@@ -44,12 +44,13 @@ class SortieType extends AbstractType
             ->add('dateLimiteInscription', DateType::class, [
                 'label' => 'Date limite d\'inscription:',
                 'label_attr'=>['class'=>'col-4'],
-                'attr'=>['class'=>'col-4']
+                'attr'=>['class'=>'col-4 d-inline'],
+
             ])
             ->add('nbMaxInscription', IntegerType::class,[
                 'label' => 'Nombre de places:',
                 'label_attr'=>['class'=>'col-4'],
-                'attr'=>['class'=>'col-4']
+                'attr'=>['class'=>'col-4 ']
             ])
             ->add('infoSortie', TextareaType::class, [
                 'label'=> 'Information sur la sortie:',
@@ -66,7 +67,8 @@ class SortieType extends AbstractType
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
-                'label_attr'=>['class'=>'col-4']
+                'label_attr'=>['class'=>'col-6'],
+                'attr'=>['class'=>'col-4']
 
             ])
           // ->add('Enregistrer', SubmitType::class)

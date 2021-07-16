@@ -8,7 +8,15 @@
         {{ form_start(sortieForm) }}
         <div>
             {{ form_row(sortieForm.nom) }}
-            {{ form_row(sortieForm.dateHeureDebut) }}
+            <div class="row">
+                <div class="col-4">
+                    {{ form_label(sortieForm.dateHeureDebut) }}
+                </div>
+                <div class="col-4">
+                    {{ form_widget(sortieForm.dateHeureDebut) }}
+                </div>
+            </div>
+
             {{ form_row(sortieForm.duree) }}
             {{ form_row(sortieForm.dateLimiteInscription) }}
             {{ form_row(sortieForm.nbMaxInscription) }}
@@ -16,9 +24,17 @@
 
         </div>
         <div>
-            <label>Campus : {{ app.user.campus.nom }}</label>
+            <label class="col-4">Campus : </label>
+            <label class="col-4">{{ app.user.campus.nom }}</label>
             {{ form_row(sortieForm.ville) }}
+            <div class="row">
+                <div class="col-8">
             {{ form_row(sortieForm.lieu) }}
+                </div>
+            <button type="button" value="Creer un lieu" class="btn btn-lg btn-secondary col-2">
+                <a  class="text-white" href="{{ path('lieu_creer') }}">Creer un lieu</a>
+            </button>
+            </div>
 
          {#  <label>Rue</label>
             {{ lieu.rue }}
@@ -34,7 +50,7 @@
 
         </div>
 
-        <div>
+        <div class="mt-5 text-center">
             <input type="submit" class="btn btn-lg btn-secondary" value="Enregistrer" name="enregistrer">
             <input type="submit" class="btn btn-lg btn-secondary" value="Publier" name="publier" >
             <input  type="reset" class="btn btn-lg btn-secondary" value="Annuler" onclick= "document.location.href='{{ path('sortie_listeSortie') }}'">

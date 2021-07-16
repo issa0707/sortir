@@ -48,19 +48,23 @@ class RechercheSortieType extends AbstractType
             ])
             ->add('organise',CheckboxType::class,[
                 'label'=>'Sortie que j\'organise : ',
-                'required'=>false
+                'required'=>false,
+                'row_attr'=>['class'=>'col-5']
             ])
             ->add('inscrit',CheckboxType::class,[
                 'label'=>'Sortie où je suis inscrit : ',
-                'required'=>false
+                'required'=>false,
+                'row_attr'=>['class'=>'col-5']
             ])
             ->add('pasInscrit',CheckboxType::class,[
                 'label'=>'Sortie où je ne suis pas inscrit : ',
-                'required'=>false
+                'required'=>false,
+                'row_attr'=>['class'=>'col-5']
             ])
             ->add('passees',CheckboxType::class,[
                 'label'=>'Sortie passées : ',
-                'required'=>false
+                'required'=>false,
+                'row_attr'=>['class'=>'col-5']
             ]);
 
     }

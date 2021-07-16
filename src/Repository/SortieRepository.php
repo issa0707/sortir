@@ -6,6 +6,7 @@ use App\Entity\Sortie;
 use app\outils\RechercheSortieClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 use function Doctrine\ORM\QueryBuilder;
 
 
@@ -17,11 +18,13 @@ use function Doctrine\ORM\QueryBuilder;
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    private $requestStack;
 
-    public function __construct(ManagerRegistry $registry)
+    private $security;
+
+    public function __construct(ManagerRegistry $registry,Security $security)
     {
         parent::__construct($registry, Sortie::class);
+        $this->security=$security;
 
     }
 
@@ -60,8 +63,17 @@ class SortieRepository extends ServiceEntityRepository
     {
 
         $queryBulder=$this->createQueryBuilder('s');
+        $queryBulder->join("s.campus","c")->addSelect("c");
+        $queryBulder->join("s.etat","e")->addSelect("e");
+        $queryBulder->join("s.lieu","l")->addSelect("l");
+        $queryBulder->join("s.organisateur","o")->addSelect("o");
+
+        $queryBulder->join("o.campus","oc")->addSelect("oc");
+        $queryBulder->join("l.ville","v")->addSelect("v");
+
 
         //campus obligatoire
+
         $queryBulder->andWhere(
             $queryBulder->expr()->eq('s.campus',':campus')
         );
@@ -113,8 +125,6 @@ class SortieRepository extends ServiceEntityRepository
 
         //je teste la case passée
         if($getData->getPassees()!=false){
-            $queryBulder->join('s.etat','e');
-            $queryBulder->addSelect('e');
             $queryBulder->andWhere(
                 $queryBulder->expr()->eq('e.libelle',':etat'));
             $queryBulder->setParameter('etat','passée');

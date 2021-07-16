@@ -15,13 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class VilleController extends AbstractController
 {
-    #[Route('/ville', name: 'ville')]
-    public function index(): Response
-    {
-        return $this->render('ville/index.html.twig', [
-            'controller_name' => 'VilleController',
-        ]);
-    }
+
 
     /**
      * @Route("/admin/gererVille",name="admin_ville-gererVille")
@@ -47,5 +41,14 @@ class VilleController extends AbstractController
             'resultats'=>$resultats
         ]);
 
+
+    }
+
+    /**
+     * @return Response
+     * @Route("/ville", name="ville_avenir")
+     */
+    public function avenir(){
+        return $this->render('commun/aVenir.html.twig');
     }
 }

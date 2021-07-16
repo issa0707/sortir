@@ -10,33 +10,28 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=LieuRepository::class)
  */
 class Lieu
-{
-    /**
+{    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
-     * @Assert\Unique(message="Ce nom existe déjà !")
+     *
      */
     private $nom;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $rue;
-
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
      */
     private $latitude;
-
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank(message="Veuillez renseigner ce champ !")
